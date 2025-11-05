@@ -1,21 +1,19 @@
-import { Button, Col, Image, Nav, Row } from "react-bootstrap";
+import { Button, Col, Image, Nav, Row, Spinner } from "react-bootstrap";
 import ProfilePostCard from "./ProfilePostCard";
 import ProfileEdit from "../pages/ProfileEdit";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPostsByUser } from "../features/posts/postsSlice";
 
 export default function ProfileMidBody() {
-    const [posts, setPosts] = useState([]);
     const url = "https://pbs.twimg.com/profile_banners/83072625/1602845571/1500x500";
     const pic = "https://pbs.twimg.com/profile_images/1587405892437221376/h167Jlb2_400x400.jpg";
 
-    const fetchPosts = (userId) => {
-        console.log(userId);
-        fetch(`https://e0dc5cb0-de85-4b0b-a831-1d38b0384bcf-00-1vz07zgn5c1sd.pike.replit.dev/posts/user/${userId}`)
-            .then(response => response.json())
-            .then(data => setPosts(data))
-            .catch(error => console.error("error:", error))
-    }
+    const dispatch = useDispatch()
+    const posts = useSelector(store => store.posts.posts);
+    const loading = useSelector(store => store.posts.loading);
+
 
     useEffect(() => {
         const token = localStorage.getItem("authToken");
@@ -23,9 +21,9 @@ export default function ProfileMidBody() {
             const decodedToken = jwtDecode(token);
             console.log("Decoded token:", decodedToken);
             const userId = decodedToken.id;
-            fetchPosts(userId)
+            dispatch(fetchPostsByUser(userId))
         }
-    }, []);
+    }, [dispatch]);
 
     return (
         <Col sm={6} className="bg-light" style={{ border: "1px solid lightgrey" }}>
@@ -82,8 +80,19 @@ export default function ProfileMidBody() {
                     <Nav.Link eventKey="link-4">Likes</Nav.Link>
                 </Nav.Item>
             </Nav>
+            {loading && (
+                <Spinner
+                    animation="border"
+                    className="ms-3"
+                    variant="primary"
+                />
+            )}
             {posts.length > 0 && posts.map((post) => (
-                <ProfilePostCard key={post.id} content={post.content} postId={post.id} />
+                <ProfilePostCard
+                    key={post.id}
+                    content={post.content}
+                    postId={post.id}
+                />
             ))}
         </Col>
     );
