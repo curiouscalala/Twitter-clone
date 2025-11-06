@@ -9,7 +9,7 @@ export default function ProfilePostCard({ content, postId }) {
     const decode = jwtDecode(token);
     const userId = decode.id;
 
-    const pic = "https://pbs.twimg.com/profile_images/1587405892437221376/h167Jlb2_400x400.jpg";
+    const pic = "https://pbs.twimg.com/profile_images/1524773861606432768/Hd8Gm6rq_400x400.jpg";
     const BASE_URL = "https://e0dc5cb0-de85-4b0b-a831-1d38b0384bcf-00-1vz07zgn5c1sd.pike.replit.dev"
 
 
