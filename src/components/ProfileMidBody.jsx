@@ -53,14 +53,14 @@ export default function ProfileMidBody() {
                 Sarah
             </p>
 
-            <p style={{ marginBottom: "2px" }}>@sarah.d</p>
+            <p style={{ marginBottom: "2px" }}>@sarah.dahner</p>
 
-            <p>I just wanna learn.</p>
+            <p>I am going crazy trying to learn this thing.</p>
 
-            <p>Student</p>
+            <p>Unemployed student</p>
 
             <p>
-                <strong>271</strong> Following <strong>610</strong> Followers
+                <strong> 10 </strong> Following <strong> 259M </strong> Followers
             </p>
 
             <Nav variant="underline" defaultActiveKey="/home" justify>

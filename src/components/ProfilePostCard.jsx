@@ -60,7 +60,7 @@ export default function ProfilePostCard({ content, postId }) {
 
             <Col>
                 <strong>Sarah</strong>
-                <span> @sarah.dahner · Apr 16</span>
+                <span> @sarah.dahner · Feb 3</span>
                 <p>{content}</p>
                 <div className="d-flex justify-content-between">
                     <Button variant="light">
