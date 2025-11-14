@@ -1,6 +1,5 @@
 import { Button, Col, Image, Row, Modal, Form } from "react-bootstrap";
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
     GoogleAuthProvider,
@@ -10,8 +9,6 @@ import {
     signInWithPopup
 } from "firebase/auth";
 import { AuthContext } from "../components/AuthProvider";
-
-
 
 export default function AuthPage() {
     const loginImage = "https://sig1.co/img-twitter-1";
@@ -28,8 +25,12 @@ export default function AuthPage() {
         if (currentUser) navigate("/profile");
     }, [currentUser, navigate]);
 
+    const [loginError, setLoginError] = useState("");
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoginError("");
+
         try {
             await signInWithEmailAndPassword(
                 auth,
@@ -37,9 +38,24 @@ export default function AuthPage() {
                 password
             );
         } catch (error) {
-            console.error(error);
+            console.log("Firebase error code:", error.code);
+            console.log("Firebase error message:", error.message);
+
+            const errorCode = error.code;
+            let errorMessage = "Something went wrong lol. Please try again.";
+
+            switch (errorCode) {
+                case "auth/invalid-credential":
+                    errorMessage = "Incorrect email or password.";
+                    break;
+                case "auth/network-request-failed":
+                    errorMessage = "Network error, please check your connection.";
+                    break;
+            }
+
+            setLoginError(errorMessage);
         }
-    }
+    };
 
     const handleClose = () => setModalShow(null);
 
@@ -126,6 +142,11 @@ export default function AuthPage() {
                                     type="password"
                                     placeholder="Enter password" />
                             </Form.Group>
+
+                            {loginError && (
+                                <p style={{ color: "red", fontSize: "14px" }}>{loginError}</p>
+                            )}
+
                             <p style={{ fontSize: "12px" }}>
                                 By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use. Twitter may use your contact information, including your email address and phone number for purposes outlined in our Privacy Policy, like keeping your account secure and personalising our services, including ads. Learn more. Others will be able to find you by email or phone number, when provided, unless you choose otherwise here.
                             </p>
